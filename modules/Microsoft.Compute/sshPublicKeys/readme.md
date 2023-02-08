@@ -1,4 +1,4 @@
-# Compute Disks `[Microsoft.Compute/disks]`
+# Compute Disks `[Microsoft.Compute/sshPublicKeys]`
 
 This template deploys a disk
 
@@ -16,50 +16,26 @@ This template deploys a disk
 | :-- | :-- |
 | `Microsoft.Authorization/locks` | [2020-05-01](https://docs.microsoft.com/en-us/azure/templates/Microsoft.Authorization/2020-05-01/locks) |
 | `Microsoft.Authorization/roleAssignments` | [2022-04-01](https://docs.microsoft.com/en-us/azure/templates/Microsoft.Authorization/2022-04-01/roleAssignments) |
-| `Microsoft.Compute/disks` | [2021-08-01](https://docs.microsoft.com/en-us/azure/templates/Microsoft.Compute/2021-08-01/disks) |
+| `Microsoft.Compute/sshPublicKeys` | [2022-08-01](https://docs.microsoft.com/en-us/azure/templates/Microsoft.Compute/2022-08-01/sshPublicKeys) |
 
 ## Parameters
 
 **Required parameters**
 
-| Parameter Name | Type | Allowed Values | Description |
-| :-- | :-- | :-- | :-- |
-| `name` | string |  | The name of the disk that is being created. |
-| `sku` | string | `[Premium_LRS, Premium_ZRS, Premium_ZRS, Standard_LRS, StandardSSD_LRS, UltraSSD_LRS]` | The disks sku name. Can be . |
-
-**Conditional parameters**
-
-| Parameter Name | Type | Default Value | Description |
-| :-- | :-- | :-- | :-- |
-| `diskSizeGB` | int | `0` | The size of the disk to create. Required if create option is Empty. |
-| `storageAccountId` | string | `''` | The resource ID of the storage account containing the blob to import as a disk. Required if create option is Import. |
+| Parameter Name | Type | Description |
+| :-- | :-- | :-- |
+| `name` | string | The name of the SSH public Key that is being created. |
 
 **Optional parameters**
 
 | Parameter Name | Type | Default Value | Allowed Values | Description |
 | :-- | :-- | :-- | :-- | :-- |
-| `acceleratedNetwork` | bool | `False` |  | True if the image from which the OS disk is created supports accelerated networking. |
-| `burstingEnabled` | bool | `False` |  | Set to true to enable bursting beyond the provisioned performance target of the disk. |
-| `completionPercent` | int | `100` |  | Percentage complete for the background copy when a resource is created via the CopyStart operation. |
-| `createOption` | string | `'Empty'` | `[Attach, Copy, CopyStart, Empty, FromImage, Import, ImportSecure, Restore, Upload, UploadPreparedSecure]` | Sources of a disk creation. |
-| `diskIOPSReadWrite` | int | `0` |  | The number of IOPS allowed for this disk; only settable for UltraSSD disks. |
-| `diskMBpsReadWrite` | int | `0` |  | The bandwidth allowed for this disk; only settable for UltraSSD disks. |
 | `enableDefaultTelemetry` | bool | `True` |  | Enable telemetry via a Globally Unique Identifier (GUID). |
-| `hyperVGeneration` | string | `'V2'` | `[V1, V2]` | The hypervisor generation of the Virtual Machine. Applicable to OS disks only. |
-| `imageReferenceId` | string | `''` |  | A relative uri containing either a Platform Image Repository or user image reference. |
 | `location` | string | `[resourceGroup().location]` |  | Resource location. |
 | `lock` | string | `''` | `['', CanNotDelete, ReadOnly]` | Specify the type of lock. |
-| `logicalSectorSize` | int | `4096` |  | Logical sector size in bytes for Ultra disks. Supported values are 512 ad 4096. |
-| `maxShares` | int | `1` |  | The maximum number of VMs that can attach to the disk at the same time. Default value is 0. |
-| `networkAccessPolicy` | string | `'DenyAll'` | `[AllowAll, AllowPrivate, DenyAll]` | Policy for accessing the disk via network. |
-| `osType` | string | `''` | `['', Linux, Windows]` | Sources of a disk creation. |
-| `publicNetworkAccess` | string | `'Disabled'` | `[Disabled, Enabled]` | Policy for controlling export on the disk. |
+| `publicKey` | string | `''` |  | SSH public key used to authenticate to a virtual machine through SSH. If this property is not initially provided when the resource is created, the publicKey property will be populated when generateKeyPair is called. If the public key is provided upon resource creation, the provided public key needs to be at least 2048-bit and in ssh-rsa format. |
 | `roleAssignments` | array | `[]` |  | Array of role assignment objects that contain the 'roleDefinitionIdOrName' and 'principalId' to define RBAC role assignments on this resource. In the roleDefinitionIdOrName attribute, you can provide either the display name of the role definition, or its fully qualified ID in the following format: '/providers/Microsoft.Authorization/roleDefinitions/c2f4ef07-c644-48eb-af81-4b1b4947fb11'. |
-| `securityDataUri` | string | `''` |  | If create option is ImportSecure, this is the URI of a blob to be imported into VM guest state. |
-| `sourceResourceId` | string | `''` |  | If create option is Copy, this is the ARM ID of the source snapshot or disk. |
-| `sourceUri` | string | `''` |  | If create option is Import, this is the URI of a blob to be imported into a managed disk. |
 | `tags` | object | `{object}` |  | Tags of the availability set resource. |
-| `uploadSizeBytes` | int | `20972032` |  | If create option is Upload, this is the size of the contents of the upload including the VHD footer. |
 
 
 ### Parameter Usage: `roleAssignments`
@@ -189,30 +165,14 @@ The following module usage examples are retrieved from the content of the files 
 <summary>via Bicep module</summary>
 
 ```bicep
-module disks './Microsoft.Compute/disks/deploy.bicep' = {
-  name: '${uniqueString(deployment().name, location)}-test-cdcom'
+module sshPublicKeys './Microsoft.Compute/sshPublicKeys/deploy.bicep' = {
+  name: '${uniqueString(deployment().name, location)}-test-sshcom'
   params: {
     // Required parameters
-    name: '<<namePrefix>>-cdcom001'
-    sku: 'UltraSSD_LRS'
+    name: '<<namePrefix>>-sshcom001'
     // Non-required parameters
-    diskIOPSReadWrite: 500
-    diskMBpsReadWrite: 60
-    diskSizeGB: 128
     enableDefaultTelemetry: '<enableDefaultTelemetry>'
-    lock: 'CanNotDelete'
-    logicalSectorSize: 512
-    osType: 'Windows'
-    publicNetworkAccess: 'Enabled'
-    roleAssignments: [
-      {
-        principalIds: [
-          '<managedIdentityPrincipalId>'
-        ]
-        principalType: 'ServicePrincipal'
-        roleDefinitionIdOrName: 'Reader'
-      }
-    ]
+    publicKey: '<publicKey>'
   }
 }
 ```
@@ -231,46 +191,14 @@ module disks './Microsoft.Compute/disks/deploy.bicep' = {
   "parameters": {
     // Required parameters
     "name": {
-      "value": "<<namePrefix>>-cdcom001"
-    },
-    "sku": {
-      "value": "UltraSSD_LRS"
+      "value": "<<namePrefix>>-sshcom001"
     },
     // Non-required parameters
-    "diskIOPSReadWrite": {
-      "value": 500
-    },
-    "diskMBpsReadWrite": {
-      "value": 60
-    },
-    "diskSizeGB": {
-      "value": 128
-    },
     "enableDefaultTelemetry": {
       "value": "<enableDefaultTelemetry>"
     },
-    "lock": {
-      "value": "CanNotDelete"
-    },
-    "logicalSectorSize": {
-      "value": 512
-    },
-    "osType": {
-      "value": "Windows"
-    },
-    "publicNetworkAccess": {
-      "value": "Enabled"
-    },
-    "roleAssignments": {
-      "value": [
-        {
-          "principalIds": [
-            "<managedIdentityPrincipalId>"
-          ],
-          "principalType": "ServicePrincipal",
-          "roleDefinitionIdOrName": "Reader"
-        }
-      ]
+    "publicKey": {
+      "value": "<publicKey>"
     }
   }
 }
@@ -279,32 +207,21 @@ module disks './Microsoft.Compute/disks/deploy.bicep' = {
 </details>
 <p>
 
-<h3>Example 2: Image</h3>
+<h3>Example 2: Min</h3>
 
 <details>
 
 <summary>via Bicep module</summary>
 
 ```bicep
-module disks './Microsoft.Compute/disks/deploy.bicep' = {
-  name: '${uniqueString(deployment().name, location)}-test-cdimg'
+module sshPublicKeys './Microsoft.Compute/sshPublicKeys/deploy.bicep' = {
+  name: '${uniqueString(deployment().name, location)}-test-sshmin'
   params: {
     // Required parameters
-    name: '<<namePrefix>>-cdimg001'
-    sku: 'Standard_LRS'
+    name: '<<namePrefix>>-sshmin001'
     // Non-required parameters
-    createOption: 'FromImage'
     enableDefaultTelemetry: '<enableDefaultTelemetry>'
-    imageReferenceId: '<imageReferenceId>'
-    roleAssignments: [
-      {
-        principalIds: [
-          '<managedIdentityPrincipalId>'
-        ]
-        principalType: 'ServicePrincipal'
-        roleDefinitionIdOrName: 'Reader'
-      }
-    ]
+    publicKey: ''
   }
 }
 ```
@@ -323,165 +240,14 @@ module disks './Microsoft.Compute/disks/deploy.bicep' = {
   "parameters": {
     // Required parameters
     "name": {
-      "value": "<<namePrefix>>-cdimg001"
-    },
-    "sku": {
-      "value": "Standard_LRS"
+      "value": "<<namePrefix>>-sshmin001"
     },
     // Non-required parameters
-    "createOption": {
-      "value": "FromImage"
-    },
     "enableDefaultTelemetry": {
       "value": "<enableDefaultTelemetry>"
     },
-    "imageReferenceId": {
-      "value": "<imageReferenceId>"
-    },
-    "roleAssignments": {
-      "value": [
-        {
-          "principalIds": [
-            "<managedIdentityPrincipalId>"
-          ],
-          "principalType": "ServicePrincipal",
-          "roleDefinitionIdOrName": "Reader"
-        }
-      ]
-    }
-  }
-}
-```
-
-</details>
-<p>
-
-<h3>Example 3: Import</h3>
-
-<details>
-
-<summary>via Bicep module</summary>
-
-```bicep
-module disks './Microsoft.Compute/disks/deploy.bicep' = {
-  name: '${uniqueString(deployment().name, location)}-test-cdimp'
-  params: {
-    // Required parameters
-    name: '<<namePrefix>>-cdimp001'
-    sku: 'Standard_LRS'
-    // Non-required parameters
-    createOption: 'Import'
-    enableDefaultTelemetry: '<enableDefaultTelemetry>'
-    roleAssignments: [
-      {
-        principalIds: [
-          '<managedIdentityPrincipalId>'
-        ]
-        principalType: 'ServicePrincipal'
-        roleDefinitionIdOrName: 'Reader'
-      }
-    ]
-    sourceUri: '<sourceUri>'
-    storageAccountId: '<storageAccountId>'
-  }
-}
-```
-
-</details>
-<p>
-
-<details>
-
-<summary>via JSON Parameter file</summary>
-
-```json
-{
-  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    // Required parameters
-    "name": {
-      "value": "<<namePrefix>>-cdimp001"
-    },
-    "sku": {
-      "value": "Standard_LRS"
-    },
-    // Non-required parameters
-    "createOption": {
-      "value": "Import"
-    },
-    "enableDefaultTelemetry": {
-      "value": "<enableDefaultTelemetry>"
-    },
-    "roleAssignments": {
-      "value": [
-        {
-          "principalIds": [
-            "<managedIdentityPrincipalId>"
-          ],
-          "principalType": "ServicePrincipal",
-          "roleDefinitionIdOrName": "Reader"
-        }
-      ]
-    },
-    "sourceUri": {
-      "value": "<sourceUri>"
-    },
-    "storageAccountId": {
-      "value": "<storageAccountId>"
-    }
-  }
-}
-```
-
-</details>
-<p>
-
-<h3>Example 4: Min</h3>
-
-<details>
-
-<summary>via Bicep module</summary>
-
-```bicep
-module disks './Microsoft.Compute/disks/deploy.bicep' = {
-  name: '${uniqueString(deployment().name, location)}-test-cdmin'
-  params: {
-    // Required parameters
-    name: '<<namePrefix>>-cdmin001'
-    sku: 'Standard_LRS'
-    // Non-required parameters
-    diskSizeGB: 1
-    enableDefaultTelemetry: '<enableDefaultTelemetry>'
-  }
-}
-```
-
-</details>
-<p>
-
-<details>
-
-<summary>via JSON Parameter file</summary>
-
-```json
-{
-  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentParameters.json#",
-  "contentVersion": "1.0.0.0",
-  "parameters": {
-    // Required parameters
-    "name": {
-      "value": "<<namePrefix>>-cdmin001"
-    },
-    "sku": {
-      "value": "Standard_LRS"
-    },
-    // Non-required parameters
-    "diskSizeGB": {
-      "value": 1
-    },
-    "enableDefaultTelemetry": {
-      "value": "<enableDefaultTelemetry>"
+    "publicKey": {
+      "value": ""
     }
   }
 }
