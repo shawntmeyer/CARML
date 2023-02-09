@@ -9,7 +9,7 @@ targetScope = 'subscription'
 param resourceGroupName string = 'ms.compute.virtualMachines-${serviceShort}-rg'
 
 @description('Optional. The location to deploy resources to.')
-param location string = 'eastUs'
+param location string = deployment().location
 
 @description('Optional. A short identifier for the kind of deployment. Should be kept short to not run into resource-name length-constraints.')
 param serviceShort string = 'cvmwincom'
@@ -135,7 +135,7 @@ module testDeployment '../../deploy.bicep' = {
       }
     }
     osType: 'Windows'
-    vmSize: 'Standard_DS2_v5'
+    vmSize: 'Standard_D2s_v5'
     adminPassword: password
     availabilityZone: 2
     backupPolicyName: nestedDependencies.outputs.recoveryServicesVaultBackupPolicyName
