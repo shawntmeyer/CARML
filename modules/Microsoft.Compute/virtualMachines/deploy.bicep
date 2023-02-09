@@ -37,6 +37,9 @@ param osDisk object
 @description('Optional. Specifies the data disks. For security reasons, it is recommended to specify DiskEncryptionSet into the dataDisk object. Restrictions: DiskEncryptionSet cannot be enabled if Azure Disk Encryption (guest-VM encryption using bitlocker/DM-Crypt) is enabled on your VMs.')
 param dataDisks array = []
 
+@description('Optional. The flag that enables or disables a capability to hibernate a virtual machine.')
+param hibernationEnabled bool = false
+
 @description('Optional. The flag that enables or disables a capability to have one or more managed data disks with UltraSSD_LRS storage account type on the VM or VMSS. Managed disks with storage account type UltraSSD_LRS can be added to a virtual machine or virtual machine scale set only if this property is enabled.')
 param ultraSSDEnabled bool = false
 
@@ -464,6 +467,7 @@ resource vm 'Microsoft.Compute/virtualMachines@2021-07-01' = {
       }]
     }
     additionalCapabilities: {
+      hibernationEnabled: hibernationEnabled
       ultraSSDEnabled: ultraSSDEnabled
     }
     osProfile: {
