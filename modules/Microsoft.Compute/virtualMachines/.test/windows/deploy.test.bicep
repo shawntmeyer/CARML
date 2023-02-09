@@ -135,7 +135,7 @@ module testDeployment '../../deploy.bicep' = {
       }
     }
     osType: 'Windows'
-    vmSize: 'Standard_DS2_v2'
+    vmSize: 'Standard_DS2_v5'
     adminPassword: password
     availabilityZone: 2
     backupPolicyName: nestedDependencies.outputs.recoveryServicesVaultBackupPolicyName

@@ -1814,7 +1814,7 @@ module virtualmachines './Microsoft.Compute/virtualmachines/deploy.bicep' = {
       }
     }
     osType: 'Windows'
-    vmSize: 'Standard_DS2_v2'
+    vmSize: 'Standard_DS2_v5'
     // Non-required parameters
     adminPassword: '<adminPassword>'
     availabilityZone: 2
@@ -2015,7 +2015,7 @@ module virtualmachines './Microsoft.Compute/virtualmachines/deploy.bicep' = {
       "value": "Windows"
     },
     "vmSize": {
-      "value": "Standard_DS2_v2"
+      "value": "Standard_DS2_v5"
     },
     // Non-required parameters
     "adminPassword": {
