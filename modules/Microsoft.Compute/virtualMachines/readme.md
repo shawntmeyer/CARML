@@ -1907,6 +1907,7 @@ module virtualmachines './Microsoft.Compute/virtualmachines/deploy.bicep' = {
     extensionNetworkWatcherAgentConfig: {
       enabled: true
     }
+    hibernationEnabled: true
     location: '<location>'
     lock: 'CanNotDelete'
     monitoringWorkspaceId: '<monitoringWorkspaceId>'
@@ -2153,6 +2154,9 @@ module virtualmachines './Microsoft.Compute/virtualmachines/deploy.bicep' = {
       "value": {
         "enabled": true
       }
+    },
+    "hibernationEnabled": {
+      "value": true
     },
     "location": {
       "value": "<location>"

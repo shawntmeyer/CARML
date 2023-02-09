@@ -81,6 +81,7 @@ module testDeployment '../../deploy.bicep' = {
       sku: '2019-datacenter'
       version: 'latest'
     }
+    hibernationEnabled: true
     nicConfigurations: [
       {
         deleteOption: 'Delete'
