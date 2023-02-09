@@ -79,7 +79,7 @@ This module deploys one Virtual Machine with one or multiple NICs and optionally
 | `extensionDSCConfig` | object | `{object}` |  | The configuration for the [Desired State Configuration] extension. Must at least contain the ["enabled": true] property to be executed. |
 | `extensionMonitoringAgentConfig` | object | `{object}` |  | The configuration for the [Monitoring Agent] extension. Must at least contain the ["enabled": true] property to be executed. |
 | `extensionNetworkWatcherAgentConfig` | object | `{object}` |  | The configuration for the [Network Watcher Agent] extension. Must at least contain the ["enabled": true] property to be executed. |
-| `hibernationEnabled` | bool | `False` |  | The flag that enables or disables a capability to hibernate a virtual machine. |
+| `hibernationEnabled` | bool | `False` |  | The flag that enables or disables a capability to hibernate a virtual machine. Restrictions: Requires VM Dsv5 Skus. |
 | `licenseType` | string | `''` | `['', Windows_Client, Windows_Server]` | Specifies that the image or disk that is being used was licensed on-premises. This element is only used for images that contain the Windows Server operating system. |
 | `location` | string | `[resourceGroup().location]` |  | Location for all resources. |
 | `lock` | string | `''` | `['', CanNotDelete, ReadOnly]` | Specify the type of lock. |
